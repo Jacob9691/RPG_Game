@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RPG_GameLogic.Units
 {
-    internal class Enemy(string name, int currentHealth, int experience, int money) : IUnit
+    internal class Enemy(string? name, int currentHealth, int experience, int money) : IUnit
     {
         public string? Name { get; } = name;
 

@@ -72,5 +72,13 @@ namespace RPG_GameLogic.Units
 
             Console.WriteLine($"{Name} leveled up to {Level}. Max health: {MaxHealth}");
         }
+
+        public void Loot(int experience, int money) 
+        {
+            Experience += experience;
+            if (Experience >= ExpBar)
+                LevelUp();
+            Money += money;
+        }
     }
 }
