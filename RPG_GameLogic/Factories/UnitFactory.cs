@@ -1,4 +1,5 @@
 ﻿using RPG_GameLogic.Interfaces;
+using RPG_GameLogic.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,14 @@ namespace RPG_GameLogic.Factories
 {
     internal class UnitFactory
     {
-        public static IUnit CreateUnit(string unitType)
+        public IPlayer CreatePlayer(string? name, int maxHealth)
         {
-            // Implement unit creation logic here
-            return null;
+            return new Player(name, maxHealth);
+        }
+
+        public IUnit CreateEnemy()
+        {
+            return new Enemy(name, currentHealth, experience, money);
         }
     }
 }

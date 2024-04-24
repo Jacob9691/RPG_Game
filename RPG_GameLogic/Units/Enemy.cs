@@ -1,40 +1,53 @@
 ﻿using RPG_GameLogic.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace RPG_GameLogic.Units
 {
-    internal class Enemy : IUnit
+    internal class Enemy(string name, int currentHealth, int experience, int money) : IUnit
     {
-        public string Name => throw new NotImplementedException();
+        public string? Name { get; } = name;
 
-        public string Description => throw new NotImplementedException();
+        public int CurrentHealth { get; set; } = currentHealth;
 
-        public int MaxHealth => throw new NotImplementedException();
+        public int Experience { get; set; } = experience;
 
-        public int CurrentHealth => throw new NotImplementedException();
+        public int Money { get; set; } = money;
 
-        public void Attack(int damage)
+        public void Attack(int damage, string weaponType)
         {
-            throw new NotImplementedException();
+            switch (weaponType)
+            {
+                case "Bow":
+                    Console.WriteLine($"{Name} shoots at you for {damage} damage!");
+                    break;
+                case "Sword":
+                    Console.WriteLine($"{Name} swings at you for {damage} damage!");
+                    break;
+                case "Shield":
+                    Console.WriteLine($"{Name} reflects your attack back at you for {damage} damage!");
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void Die()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Move()
-        {
-            throw new NotImplementedException();
+            Console.WriteLine($"{Name} has died!");
         }
 
         public void TakeDamage(int damage)
         {
-            throw new NotImplementedException();
+            CurrentHealth -= damage;
+            if (CurrentHealth <= 0)
+                Die();
+            else
+                Console.WriteLine($"{Name} takes {damage} damage. Current health: {CurrentHealth}");
         }
     }
 }

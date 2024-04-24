@@ -8,13 +8,13 @@ namespace RPG_GameLogic.Interfaces
 {
     internal interface IUnit
     {
-        string Name { get; }
-        string Description { get; }
-        int MaxHealth { get; }
-        int CurrentHealth {  get; }
-        void Move();
-        void TakeDamage(int damage);
-        void Attack(int damage);
+        string? Name { get; }
+        int CurrentHealth { get; set; }
+        int Experience { get; set; }
+        int Money { get; set; }
+
+        void Attack(int damage, string weaponType);
         void Die();
+        void TakeDamage(int damage);
     }
 }

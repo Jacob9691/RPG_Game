@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RPG_GameLogic.Items.Weapons
 {
-    internal class Axe : IWeapon
+    internal class Shield : IWeapon
     {
         public void Attack(IUnit target)
         {

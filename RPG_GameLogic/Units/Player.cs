@@ -4,37 +4,73 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RPG_GameLogic.Units
 {
-    internal class Player : IUnit
+    internal class Player(string? name, int maxHealth) : IPlayer
     {
-        public string Name => throw new NotImplementedException();
+        public string? Name { get; } = name;
 
-        public string Description => throw new NotImplementedException();
+        public int MaxHealth { get; set; } = maxHealth;
 
-        public int MaxHealth => throw new NotImplementedException();
+        public int CurrentHealth { get; set; } = maxHealth;
 
-        public int CurrentHealth => throw new NotImplementedException();
+        public int Level { get; set; } = 1;
 
-        public void Attack(int damage)
+        public int Experience { get; set; } = 0;
+
+        public int ExpBar { get; set; } = 100;
+
+        public int Money { get; set; } = 0;
+
+        public void Attack(int damage, string weaponType)
         {
-            throw new NotImplementedException();
+            switch (weaponType)
+            {
+                case "Bow":
+                    Console.WriteLine($"{Name} shoots with their bow for {damage} damage!");
+                    break;
+                case "Sword":
+                    Console.WriteLine($"{Name} swings with their sword for {damage} damage!");
+                    break;
+                case "Shield":
+                    Console.WriteLine($"{Name} reflects with their shield the enemy's attack for {damage} damage!");
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void Die()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Move()
-        {
-            throw new NotImplementedException();
+            Console.WriteLine($"{Name} has died...");
         }
 
         public void TakeDamage(int damage)
         {
-            throw new NotImplementedException();
+            CurrentHealth -= damage;
+            if (CurrentHealth <= 0)
+                Die();
+            else
+                Console.WriteLine($"{Name} takes {damage} damage. Current health: {CurrentHealth}");
+        }
+
+        public void Heal()
+        {
+            CurrentHealth = MaxHealth;
+            Console.WriteLine($"{Name} heals themself. Current health: {CurrentHealth}");
+        }
+
+        public void LevelUp()
+        {
+            Experience = 0;
+            Level++;
+            ExpBar += 50;
+            MaxHealth += 25;
+            CurrentHealth = MaxHealth;
+
+            Console.WriteLine($"{Name} leveled up to {Level}. Max health: {MaxHealth}");
         }
     }
 }
