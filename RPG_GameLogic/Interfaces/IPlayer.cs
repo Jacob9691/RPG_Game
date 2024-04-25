@@ -15,5 +15,6 @@ namespace RPG_GameLogic.Interfaces
         void Heal();
         void LevelUp();
         void Loot(int experience, int money);
+        void HealingOrbs(int orb);
     }
 }

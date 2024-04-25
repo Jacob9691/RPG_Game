@@ -1,7 +1,9 @@
 ﻿using RPG_GameLogic.Interfaces;
+using RPG_GameLogic.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +17,11 @@ namespace RPG_GameLogic.Helpers
 
         public string CombatLogic(IPlayer player, IUnit enemy, IWeapon bow, IWeapon sword, IWeapon shield) 
         {
+            List<int> HealingOrbs = new List<int>();
+            List<Task> Tasks = new List<Task>();
+
             bool Combat = true;
+            
             while (Combat)
             {
                 try
@@ -23,12 +29,19 @@ namespace RPG_GameLogic.Helpers
                     Console.Clear();
                     Console.WriteLine($"{player.Name}\nhealth: {player.CurrentHealth}\n");
                     enemy.ShowStats();
-                    Console.WriteLine("\nAttack with bow, sword or shield");
+                    Console.WriteLine($"\nAttack with bow, sword or shield\nYou got {HealingOrbs.Count} healing orbs (type heal to use)\n");
                     string? EnemyAction = enemyGenerator.GetEnemyAction(rng.Next(0, 3));
                     string? Action = Console.ReadLine();
 
                     int EnemyDamage = rng.Next(10, 20);
                     int PlayerDamge = rng.Next(bow.MinDamage, bow.MaxDamage);
+
+                    if (HealingOrbs.Count > 0 && Action == "heal")
+                    {
+                        _ = HandleHealingOrbsAsync(player, HealingOrbs, Tasks);
+                        HealingOrbs = new List<int>();
+                        Tasks = new List<Task>();
+                    }
 
                     if (Action == "bow")
                     {
@@ -41,6 +54,8 @@ namespace RPG_GameLogic.Helpers
                         {
                             player.Attack(rng.Next(bow.MinDamage, bow.MaxDamage), Action);
                             enemy.TakeDamage(PlayerDamge);
+                            HealingOrbs.Add(rng.Next(1, 6));
+                            Console.WriteLine("You got a healing orb");
                         }
                         else
                         {
@@ -58,6 +73,8 @@ namespace RPG_GameLogic.Helpers
                         {
                             player.Attack(rng.Next(sword.MinDamage, sword.MaxDamage), Action);
                             enemy.TakeDamage(PlayerDamge);
+                            HealingOrbs.Add(rng.Next(1, 6));
+                            Console.WriteLine("You got a healing orb");
                         }
                         else
                         {
@@ -75,6 +92,8 @@ namespace RPG_GameLogic.Helpers
                         {
                             player.Attack(rng.Next(shield.MinDamage, shield.MaxDamage), Action);
                             enemy.TakeDamage(PlayerDamge);
+                            HealingOrbs.Add(rng.Next(1, 6));
+                            Console.WriteLine("You got a healing orb");
                         }
                         else
                         {
@@ -101,6 +120,17 @@ namespace RPG_GameLogic.Helpers
             }
 
             return "failed";
+        }
+
+        private async Task HandleHealingOrbsAsync(IPlayer player, List<int> HealingOrbs, List<Task> Tasks)
+        {
+            foreach (int i in HealingOrbs)
+            {
+                Tasks.Add(Task.Run(() => {
+                    player.HealingOrbs(i);
+                }));
+            }
+            await Task.WhenAll(Tasks);
         }
     }
 }

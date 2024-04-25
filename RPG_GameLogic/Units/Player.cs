@@ -13,6 +13,8 @@ namespace RPG_GameLogic.Units
         public int ExpBar { get; set; }
         public int Money { get; set; }
 
+        readonly object _locker = new object();
+
         public Player(string? name, int maxHealth)
         {
             Name = name;
@@ -137,6 +139,26 @@ namespace RPG_GameLogic.Units
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        public void HealingOrbs(int orb)
+        {
+            lock (_locker)
+            {
+                try
+                {
+                    if (CurrentHealth <= MaxHealth)
+                        CurrentHealth += orb;
+                    Console.WriteLine($"a {orb} orb heals you");
+                    if (CurrentHealth > MaxHealth)
+                        CurrentHealth = MaxHealth;
+                    Thread.Sleep(500);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
             }
         }
     }
