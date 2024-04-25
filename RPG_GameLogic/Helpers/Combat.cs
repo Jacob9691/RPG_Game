@@ -24,7 +24,7 @@ namespace RPG_GameLogic.Helpers
                     Console.WriteLine($"{player.Name}\nhealth: {player.CurrentHealth}\n");
                     enemy.ShowStats();
                     Console.WriteLine("\nAttack with bow, sword or shield");
-                    string? EnemyAction = enemyGenerator.GetEnemyAction(rng.Next(0, 2));
+                    string? EnemyAction = enemyGenerator.GetEnemyAction(rng.Next(0, 3));
                     string? Action = Console.ReadLine();
 
                     int EnemyDamage = rng.Next(10, 20);
