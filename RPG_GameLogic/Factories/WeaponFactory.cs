@@ -12,7 +12,15 @@ namespace RPG_GameLogic.Factories
     {
         public IWeapon CreateWeapon<T>() where T : IWeapon, new()
         {
-            return new T();
+            try
+            {
+                return new T();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Couldn't create weapon: " + ex.Message);
+                throw;
+            }
         }
     }
 }

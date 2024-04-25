@@ -1,100 +1,143 @@
 ﻿using RPG_GameLogic.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RPG_GameLogic.Units
 {
-    internal class Player(string? name, int maxHealth) : IPlayer
+    internal class Player : IPlayer
     {
-        public string? Name { get; } = name;
+        public string? Name { get; }
+        public int MaxHealth { get; set; }
+        public int CurrentHealth { get; set; }
+        public int Level { get; set; }
+        public int Experience { get; set; }
+        public int ExpBar { get; set; }
+        public int Money { get; set; }
 
-        public int MaxHealth { get; set; } = maxHealth;
-
-        public int CurrentHealth { get; set; } = maxHealth;
-
-        public int Level { get; set; } = 1;
-
-        public int Experience { get; set; } = 0;
-
-        public int ExpBar { get; set; } = 100;
-
-        public int Money { get; set; } = 0;
+        public Player(string? name, int maxHealth)
+        {
+            Name = name;
+            MaxHealth = maxHealth;
+            CurrentHealth = maxHealth;
+            Level = 1;
+            Experience = 0;
+            ExpBar = 100;
+            Money = 0;
+        }
 
         public void Attack(int damage, string weaponType)
         {
-            switch (weaponType)
+            try
             {
-                case "bow":
-                    Console.WriteLine($"{Name} shoots with their bow for {damage} damage!");
-                    break;
-                case "sword":
-                    Console.WriteLine($"{Name} swings with their sword for {damage} damage!");
-                    break;
-                case "shield":
-                    Console.WriteLine($"{Name} reflects with their shield the enemy's attack for {damage} damage!");
-                    break;
-                default:
-                    break;
+                switch (weaponType)
+                {
+                    case "bow":
+                        Console.WriteLine($"{Name} shoots with their bow for {damage} damage!");
+                        break;
+                    case "sword":
+                        Console.WriteLine($"{Name} swings with their sword for {damage} damage!");
+                        break;
+                    case "shield":
+                        Console.WriteLine($"{Name} reflects with their shield the enemy's attack for {damage} damage!");
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid weapon type");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
 
         public void Die()
         {
-            Console.WriteLine($"{Name} has died...");
+            try
+            {
+                Console.WriteLine($"{Name} has died...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         public void TakeDamage(int damage)
         {
-            CurrentHealth -= damage;
-            if (CurrentHealth <= 0)
-                Die();
-            else
-                Console.WriteLine($"{Name} takes {damage} damage. Current health: {CurrentHealth}");
-            Console.ReadLine();
+            try
+            {
+                CurrentHealth -= damage;
+                if (CurrentHealth <= 0)
+                    Die();
+                else
+                    Console.WriteLine($"{Name} takes {damage} damage. Current health: {CurrentHealth}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         public void Heal()
         {
-            if (Money < 75)
+            try
             {
-                Console.WriteLine("Not enough money to heal");
-                return;
+                if (Money < 75)
+                {
+                    Console.WriteLine("Not enough money to heal");
+                    return;
+                }
+                CurrentHealth = MaxHealth;
+                Console.WriteLine($"{Name} heals themself. Current health: {CurrentHealth}");
             }
-            CurrentHealth = MaxHealth;
-            Console.WriteLine($"{Name} heals themself. Current health: {CurrentHealth}");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         public void LevelUp()
         {
-            Experience = 0;
-            Level++;
-            ExpBar += 50;
-            MaxHealth += 25;
-            CurrentHealth = MaxHealth;
-
-            Console.WriteLine($"{Name} leveled up to {Level}. Max health: {MaxHealth}");
+            try
+            {
+                Experience = 0;
+                Level++;
+                ExpBar += 50;
+                MaxHealth += 25;
+                CurrentHealth = MaxHealth;
+                Console.WriteLine($"{Name} leveled up to {Level}. Max health: {MaxHealth}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
-        public void Loot(int experience, int money) 
+        public void Loot(int experience, int money)
         {
-            Console.WriteLine($"{Name} won the battle");
-            Experience += experience;
-            if (Experience >= ExpBar)
-                LevelUp();
-            Money += money;
+            try
+            {
+                Console.WriteLine($"{Name} won the battle");
+                Experience += experience;
+                if (Experience >= ExpBar)
+                    LevelUp();
+                Money += money;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         public void ShowStats()
         {
-            Console.WriteLine($"Name: {Name}" +
-                            $"\nHealth: {CurrentHealth}/{MaxHealth}" +
-                            $"\nLevel: {Level}" +
-                            $"\nExp: {Experience}/{ExpBar}" +
-                            $"\nMoney: {Money}");
+            try
+            {
+                Console.WriteLine($"Name: {Name}\nHealth: {CurrentHealth}/{MaxHealth}\nLevel: {Level}\nExp: {Experience}/{ExpBar}\nMoney: {Money}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
         }
     }
 }

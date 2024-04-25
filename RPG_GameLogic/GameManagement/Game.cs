@@ -37,59 +37,67 @@ namespace RPG_GameLogic.GameManagement
 
             while (true)
             {
-                string? playerOption = setupAndOptions.PlayerOptions();
-
-                switch (playerOption)
+                try
                 {
-                    case "show stats":
-                        Console.Clear();
-                        player.ShowStats();
-                        Console.WriteLine($"{bow.WeaponLevel} bow\n{sword.WeaponLevel} sword\n{shield.WeaponLevel} shield");
-                        Console.ReadLine();
-                        break;
-                    case "combat":
-                        Console.Clear();
-                        var enemy = unitFactory.CreateEnemy();
-                        string result = combat.CombatLogic(player, enemy, bow, sword, shield);
-                        if (result == "failed")
+                    string? playerOption = setupAndOptions.PlayerOptions();
+
+                    switch (playerOption)
+                    {
+                        case "show stats":
+                            Console.Clear();
+                            player.ShowStats();
+                            Console.WriteLine($"{bow.WeaponLevel} bow\n{sword.WeaponLevel} sword\n{shield.WeaponLevel} shield");
+                            Console.ReadLine();
+                            break;
+                        case "combat":
+                            Console.Clear();
+                            var enemy = unitFactory.CreateEnemy();
+                            string result = combat.CombatLogic(player, enemy, bow, sword, shield);
+                            if (result == "failed")
+                                return;
+                            Console.ReadLine();
+                            break;
+                        case "heal":
+                            Console.Clear();
+                            player.Heal();
+                            Console.ReadLine();
+                            break;
+                        case "upgrade weapons":
+                            Console.Clear();
+                            Console.WriteLine($"Upgrade list:\nbow {bow.UpgrdePrice}g\nsword {sword.UpgrdePrice}\nshield {shield.UpgrdePrice}");
+                            string? ItemPick = Console.ReadLine();
+                            switch (ItemPick)
+                            {
+                                case "bow":
+                                    Console.Clear();
+                                    weaponUpgrader.Upgrade(player, bow);
+                                    break;
+                                case "sword":
+                                    Console.Clear();
+                                    weaponUpgrader.Upgrade(player, sword);
+                                    break;
+                                case "shield":
+                                    Console.Clear();
+                                    weaponUpgrader.Upgrade(player, shield);
+                                    break;
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }
+                            break;
+                        case "end":
+                            Console.WriteLine("Thank you for playing");
+                            Console.ReadLine();
                             return;
-                        Console.ReadLine();
-                        break;
-                    case "heal":
-                        Console.Clear();
-                        player.Heal();
-                        Console.ReadLine();
-                        break;
-                    case "upgrade weapons":
-                        Console.Clear();
-                        Console.WriteLine($"Upgrade list:\nbow {bow.UpgrdePrice}g\nsword {sword.UpgrdePrice}\nshield {shield.UpgrdePrice}");
-                        string? ItemPick = Console.ReadLine();
-                        switch (ItemPick)
-                        {
-                            case "bow":
-                                Console.Clear();
-                                weaponUpgrader.Upgrade(player, bow);
-                                break;
-                            case "sword":
-                                Console.Clear();
-                                weaponUpgrader.Upgrade(player, sword);
-                                break;
-                            case "shield":
-                                Console.Clear();
-                                weaponUpgrader.Upgrade(player, shield);
-                                break;
-                            default:
-                                Console.Clear();
-                                break;
-                        }
-                        break;
-                    case "end":
-                        Console.WriteLine("Thank you for playing");
-                        Console.ReadLine();
-                        return;
-                    default:
-                        Console.Clear();
-                        break;
+                        default:
+                            Console.Clear();
+                            break;
+                    }
+                }
+                catch (Exception ex) 
+                { 
+                    Console.WriteLine(ex.ToString()); 
+                    return; 
                 }
             }
         }

@@ -16,16 +16,32 @@ namespace RPG_GameLogic.Factories
 
         public IPlayer CreatePlayer(string? name, int maxHealth)
         {
-            return new Player(name, maxHealth);
+            try
+            {
+                return new Player(name, maxHealth);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Couldn't create player: " + ex.Message);
+                throw;
+            }
         }
 
         public IUnit CreateEnemy()
         {
-            string? name = enemyGenerator.GetEnemyName(rng.Next(0, 4));
-            int currentHealth = rng.Next(50, 100);
-            int experience = rng.Next(25, 100);
-            int money = rng.Next(50, 250);
-            return new Enemy(name, currentHealth, experience, money);
+            try
+            {
+                string? name = enemyGenerator.GetEnemyName(rng.Next(0, 4));
+                int currentHealth = rng.Next(50, 100);
+                int experience = rng.Next(25, 100);
+                int money = rng.Next(50, 250);
+                return new Enemy(name, currentHealth, experience, money);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Couldn't create enemy: " + ex.Message);
+                throw;
+            }
         }
     }
 }

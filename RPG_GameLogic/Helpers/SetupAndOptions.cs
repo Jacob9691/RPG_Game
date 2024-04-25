@@ -18,44 +18,52 @@ namespace RPG_GameLogic.Helpers
         }
         public (string?, int) Setup()
         {
-            bool NamePicking = true;
-            string? name = "";
+            try
+            {
+                bool NamePicking = true;
+                string? name = "";
 
-            while (NamePicking)
-            {
-                Console.WriteLine("Make your character");
-                Console.WriteLine("Type your name:");
-                try
+                while (NamePicking)
                 {
-                    name = Console.ReadLine();
-                    NamePicking = name == null || name.Length == 0;
+                    Console.WriteLine("Make your character");
+                    Console.WriteLine("Type your name:");
+                    try
+                    {
+                        name = Console.ReadLine();
+                        NamePicking = name == null || name.Length == 0;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    Console.Clear();
                 }
-                catch (Exception ex)
+                Console.WriteLine("Do you want easy or hard mode?");
+                var mode = Console.ReadLine();
+                int health;
+                if (mode == "easy")
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("You picked easy mode");
+                    health = 100;
                 }
-                Console.Clear();
+                else if (mode == "hard")
+                {
+                    Console.WriteLine("You picked hard mode");
+                    health = 50;
+                }
+                else
+                {
+                    Console.WriteLine("You didn't pick a mode so you'll get extra hard mode :)");
+                    Console.ReadLine();
+                    health = 25;
+                }
+                return (name, health);
             }
-            Console.WriteLine("Do you want easy or hard mode?");
-            var mode = Console.ReadLine();
-            int health;
-            if (mode == "easy")
+            catch(Exception ex)
             {
-                Console.WriteLine("You picked easy mode");
-                health = 100;
+                Console.WriteLine(ex.Message);
+                throw;
             }
-            else if (mode == "hard")
-            {
-                Console.WriteLine("You picked hard mode");
-                health = 50;
-            }
-            else
-            {
-                Console.WriteLine("You didn't pick a mode so you'll get extra hard mode :)");
-                Console.ReadLine();
-                health = 25;
-            }
-            return (name, health);
         }
     }
 }
