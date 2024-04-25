@@ -1,4 +1,7 @@
 ﻿using RPG_GameLogic.Factories;
+using RPG_GameLogic.Helpers;
+using RPG_GameLogic.Interfaces;
+using RPG_GameLogic.Items.Weapons;
 using RPG_GameLogic.Units;
 using System;
 using System.Collections.Generic;
@@ -17,27 +20,39 @@ namespace RPG_GameLogic.GameManagement
         {
             Console.WriteLine("Welcome to the game...");
             Console.WriteLine();
-            var Char = Setup();
-            var unitFactory = new UnitFactory();
+
+            SetupAndOptions setupAndOptions = new SetupAndOptions();
+            var Char = setupAndOptions.Setup();
+
+            UnitFactory unitFactory = new UnitFactory();
             var player = unitFactory.CreatePlayer(Char.Item1, Char.Item2);
+
+            WeaponFactory weaponFactory = new WeaponFactory();
+            var bow = weaponFactory.CreateWeapon<Bow>();
+            var sword = weaponFactory.CreateWeapon<Sword>();
+            var shield = weaponFactory.CreateWeapon<Shield>();
+            WeaponUpgrader weaponUpgrader = new WeaponUpgrader();
+
+            Combat combat = new Combat();
 
             while (true)
             {
-                string? playerOption = PlayerOptions();
+                string? playerOption = setupAndOptions.PlayerOptions();
 
                 switch (playerOption)
                 {
                     case "show stats":
                         Console.Clear();
-                        Console.WriteLine($"Name: {player.Name}" +
-                            $"\nHealth: {player.CurrentHealth}/{player.MaxHealth}" +
-                            $"\nLevel: {player.Level}" +
-                            $"\nExp: {player.Experience}/{player.ExpBar}" +
-                            $"\nMoney: {player.Money}");
+                        player.ShowStats();
+                        Console.WriteLine($"{bow.WeaponLevel} bow\n{sword.WeaponLevel} sword\n{shield.WeaponLevel} shield");
                         Console.ReadLine();
                         break;
                     case "combat":
                         Console.Clear();
+                        var enemy = unitFactory.CreateEnemy();
+                        string result = combat.CombatLogic(player, enemy, bow, sword, shield);
+                        if (result == "failed")
+                            return;
                         Console.ReadLine();
                         break;
                     case "heal":
@@ -47,7 +62,26 @@ namespace RPG_GameLogic.GameManagement
                         break;
                     case "upgrade weapons":
                         Console.Clear();
-                        Console.ReadLine();
+                        Console.WriteLine($"Upgrade list:\nbow {bow.UpgrdePrice}g\nsword {sword.UpgrdePrice}\nshield {shield.UpgrdePrice}");
+                        string? ItemPick = Console.ReadLine();
+                        switch (ItemPick)
+                        {
+                            case "bow":
+                                Console.Clear();
+                                weaponUpgrader.Upgrade(player, bow);
+                                break;
+                            case "sword":
+                                Console.Clear();
+                                weaponUpgrader.Upgrade(player, sword);
+                                break;
+                            case "shield":
+                                Console.Clear();
+                                weaponUpgrader.Upgrade(player, shield);
+                                break;
+                            default:
+                                Console.Clear();
+                                break;
+                        }
                         break;
                     case "end":
                         Console.WriteLine("Thank you for playing");
@@ -58,54 +92,6 @@ namespace RPG_GameLogic.GameManagement
                         break;
                 }
             }
-        }
-
-        private static string? PlayerOptions()
-        {
-            Console.Clear();
-            Console.WriteLine("Available inputs:\n- show stats\n- combat\n- heal\n- upgrade weapons\n- end");
-            return Console.ReadLine();
-        }
-
-        private static (string?, int) Setup()
-        {
-            bool NamePicking = true;
-            string? name = "";
-
-            while (NamePicking)
-            {
-                Console.WriteLine("Make your character");
-                Console.WriteLine("Type your name:");
-                try
-                {
-                    name = Console.ReadLine();
-                    NamePicking = name == null || name.Length == 0;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                Console.Clear();
-            }
-            Console.WriteLine("Do you want easy or hard mode?");
-            var mode = Console.ReadLine();
-            int health;
-            if (mode == "easy")
-            {
-                Console.WriteLine("You picked easy mode");
-                health = 100;
-            }
-            else if (mode == "hard")
-            {
-                Console.WriteLine("You picked hard mode");
-                health = 50;
-            }
-            else
-            {
-                Console.WriteLine("You didn't pick a mode so you'll get extra hard mode :)");
-                health = 25;
-            }
-            return (name, health);
         }
     }
 }

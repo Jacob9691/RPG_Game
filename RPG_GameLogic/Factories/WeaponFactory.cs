@@ -1,4 +1,5 @@
 ﻿using RPG_GameLogic.Interfaces;
+using RPG_GameLogic.Units;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,9 @@ namespace RPG_GameLogic.Factories
 {
     internal class WeaponFactory
     {
-        public static IWeapon CreateWeapon(string weaponType)
+        public IWeapon CreateWeapon<T>() where T : IWeapon, new()
         {
-            // Implement weapon creation logic here
-            return null;
+            return new T();
         }
     }
 }

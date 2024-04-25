@@ -16,5 +16,6 @@ namespace RPG_GameLogic.Interfaces
         void Attack(int damage, string weaponType);
         void Die();
         void TakeDamage(int damage);
+        void ShowStats();
     }
 }

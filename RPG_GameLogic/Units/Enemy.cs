@@ -22,13 +22,13 @@ namespace RPG_GameLogic.Units
         {
             switch (weaponType)
             {
-                case "Bow":
+                case "bow":
                     Console.WriteLine($"{Name} shoots at you for {damage} damage!");
                     break;
-                case "Sword":
+                case "sword":
                     Console.WriteLine($"{Name} swings at you for {damage} damage!");
                     break;
-                case "Shield":
+                case "shield":
                     Console.WriteLine($"{Name} reflects your attack back at you for {damage} damage!");
                     break;
                 default:
@@ -48,6 +48,12 @@ namespace RPG_GameLogic.Units
                 Die();
             else
                 Console.WriteLine($"{Name} takes {damage} damage. Current health: {CurrentHealth}");
+            Console.ReadLine();
+        }
+
+        public void ShowStats()
+        {
+            Console.WriteLine($"Name: {Name}" +$"\nHealth: {CurrentHealth}");
         }
     }
 }

@@ -8,6 +8,12 @@ namespace RPG_GameLogic.Interfaces
 {
     internal interface IWeapon
     {
-        void Attack(IUnit target);
+        string WeaponLevel { get; set; }
+
+        int MinDamage { get; set; }
+
+        int MaxDamage { get; set; }
+
+        int UpgrdePrice { get; set; }
     }
 }

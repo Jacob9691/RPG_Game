@@ -6,7 +6,6 @@
         {
             RPG_GameLogic.GameManagement.Game game = new();
             game.Start();
-
         }
     }
 }

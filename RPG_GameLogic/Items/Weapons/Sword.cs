@@ -9,9 +9,12 @@ namespace RPG_GameLogic.Items.Weapons
 {
     internal class Sword : IWeapon
     {
-        public void Attack(IUnit target)
-        {
-            throw new NotImplementedException();
-        }
+        public string WeaponLevel { get; set; } = "wood";
+
+        public int MinDamage { get; set; } = 10;
+
+        public int MaxDamage { get; set; } = 20;
+
+        public int UpgrdePrice { get; set; } = 100;
     }
 }

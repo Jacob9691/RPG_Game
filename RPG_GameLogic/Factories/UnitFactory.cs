@@ -1,4 +1,5 @@
-﻿using RPG_GameLogic.Interfaces;
+﻿using RPG_GameLogic.Helpers;
+using RPG_GameLogic.Interfaces;
 using RPG_GameLogic.Units;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace RPG_GameLogic.Factories
     internal class UnitFactory
     {
         readonly Random rng = new Random();
+        EnemyGenerator enemyGenerator = new EnemyGenerator();
 
         public IPlayer CreatePlayer(string? name, int maxHealth)
         {
@@ -19,24 +21,11 @@ namespace RPG_GameLogic.Factories
 
         public IUnit CreateEnemy()
         {
-            string? name = GetEnemyName(rng.Next(0, 4));
-            int currentHealth = rng.Next(100, 200);
+            string? name = enemyGenerator.GetEnemyName(rng.Next(0, 4));
+            int currentHealth = rng.Next(50, 100);
             int experience = rng.Next(25, 100);
             int money = rng.Next(50, 250);
             return new Enemy(name, currentHealth, experience, money);
-        }
-
-        private static string? GetEnemyName(int enemyPicker)
-        {
-            return enemyPicker switch
-            {
-                0 => "Slime",
-                1 => "Goblin",
-                2 => "Orc",
-                3 => "Imp",
-                4 => "Spider",
-                _ => "Slime",
-            };
         }
     }
 }

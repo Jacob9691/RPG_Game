@@ -28,13 +28,13 @@ namespace RPG_GameLogic.Units
         {
             switch (weaponType)
             {
-                case "Bow":
+                case "bow":
                     Console.WriteLine($"{Name} shoots with their bow for {damage} damage!");
                     break;
-                case "Sword":
+                case "sword":
                     Console.WriteLine($"{Name} swings with their sword for {damage} damage!");
                     break;
-                case "Shield":
+                case "shield":
                     Console.WriteLine($"{Name} reflects with their shield the enemy's attack for {damage} damage!");
                     break;
                 default:
@@ -54,10 +54,16 @@ namespace RPG_GameLogic.Units
                 Die();
             else
                 Console.WriteLine($"{Name} takes {damage} damage. Current health: {CurrentHealth}");
+            Console.ReadLine();
         }
 
         public void Heal()
         {
+            if (Money < 75)
+            {
+                Console.WriteLine("Not enough money to heal");
+                return;
+            }
             CurrentHealth = MaxHealth;
             Console.WriteLine($"{Name} heals themself. Current health: {CurrentHealth}");
         }
@@ -75,10 +81,20 @@ namespace RPG_GameLogic.Units
 
         public void Loot(int experience, int money) 
         {
+            Console.WriteLine($"{Name} won the battle");
             Experience += experience;
             if (Experience >= ExpBar)
                 LevelUp();
             Money += money;
+        }
+
+        public void ShowStats()
+        {
+            Console.WriteLine($"Name: {Name}" +
+                            $"\nHealth: {CurrentHealth}/{MaxHealth}" +
+                            $"\nLevel: {Level}" +
+                            $"\nExp: {Experience}/{ExpBar}" +
+                            $"\nMoney: {Money}");
         }
     }
 }
